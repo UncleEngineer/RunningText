@@ -1,3 +1,6 @@
+# https://github.com/UncleEngineer/RunningText/
+# Follow Uncle: http://facebook.com/UncleEngineer/
+
 from tkinter import *
 from tkinter import ttk
 import tkinter.scrolledtext as st
