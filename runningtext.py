@@ -32,7 +32,7 @@ def Fullscreen(event):
 GUI.bind('<F5>',Fullscreen)
 
 green = '#00ff01'
-FONT1 = (None,120)
+
 
 MAINTEXT = '''กด F1 รัน
 กด P เพื่อหยุดชั่วคราว
@@ -41,6 +41,8 @@ MAINTEXT = '''กด F1 รัน
 กด F3 แก้ไขข้อความ
 กด F5 เต็มจอ/ย่อ
 กด F12 ปิดโปรแกรม
+กดลูกศรซ้าย/ขวา ปรับตำแหน่ง
+กดลูกศรขึ้น/ลง ปรับขนาดฟอนต์
 สวัสดีจ้าา
 ลุงเองจ้าาาาา
 ไม่มีอะไรทำ
@@ -50,9 +52,50 @@ MAINTEXT = '''กด F1 รัน
 อ่านเรื่อยๆ
 ใช้ร้องเพลง
 คาราโอเกะ
-เราจะทำตามสัญญาได้
+เราจะทำตามสัญญา
+ขอเวลาอีกไม่นาน
+...
+...
+ฮัมวี่มารับลุงแล้ว!
 555
 '''
+
+xpos = 80
+
+fontsize = 80
+FONT1 = (None,fontsize)
+
+def readx():
+	global xpos
+	with open('xpos.txt') as rt:
+		settext = rt.read()
+		xpos = int(settext.strip())
+
+def writex():
+	with open('xpos.txt','w') as rt:
+		rt.write(str(xpos))
+
+try:
+	readx()
+except:
+	writex()
+
+
+def readfont():
+	global fontsize
+	with open('fontsize.txt') as rt:
+		settext = rt.read()
+		fontsize = int(fontsize.strip())
+
+def writefont():
+	with open('fontsize.txt','w') as rt:
+		rt.write(str(fontsize))
+
+try:
+	readfont()
+except:
+	writefont()
+
 
 def readtext():
 	global MAINTEXT
@@ -74,7 +117,7 @@ MTEXT.set(MAINTEXT)
 
 
 MT = Label(GUI,textvariable=MTEXT,font=FONT1, foreground = green, background='black')
-MT.place(x=50,y=0)
+MT.place(x=xpos,y=0)
 global ypos
 global runafter
 
@@ -83,7 +126,7 @@ ypos = 0
 def MoveText(event=None):
 	global ypos
 	global runafter
-	MT.place(x=50,y=ypos)
+	MT.place(x=xpos,y=ypos)
 	ypos -= 5
 	runafter = MT.after(60,MoveText)
 	
@@ -130,6 +173,41 @@ def Resume(event):
 	MoveText()
 
 
+def Right(event):
+	global xpos
+	xpos += 10
+	writex()
+	readx()
+	MT.place(x=xpos,y=ypos)
+
+
+def Left(event):
+	global xpos
+	xpos -= 10
+	writex()
+	readx()
+	MT.place(x=xpos,y=ypos)
+
+
+def FontInc(event):
+	global FONT1
+	global fontsize
+	fontsize += 5
+	FONT1 = (None,fontsize)
+	MT.configure(font=FONT1)
+
+def FontDec(event):
+	global FONT1
+	global fontsize
+	fontsize -= 5
+	FONT1 = (None,fontsize)
+	MT.configure(font=FONT1)
+
+
+GUI.bind('<Up>',FontInc)
+GUI.bind('<Down>',FontDec)
+GUI.bind('<Right>',Right)
+GUI.bind('<Left>',Left)
 GUI.bind('<p>',Pause)
 GUI.bind('<r>',Resume)
 GUI.bind('<F1>', MoveText)
