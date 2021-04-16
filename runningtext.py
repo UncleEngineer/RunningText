@@ -1,8 +1,10 @@
-# https://github.com/UncleEngineer/RunningText/
+# -*- coding: utf-8 -*-
+
+# https://github.com/UncleEngineer/UncleNews/
 # Follow Uncle: http://facebook.com/UncleEngineer/
 
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import tkinter.scrolledtext as st
 
 
@@ -33,13 +35,13 @@ GUI.bind('<F5>',Fullscreen)
 
 green = '#00ff01'
 
-
-MAINTEXT = '''กด F1 รัน
+HELP = '''กด F1 รัน/เพิ่มความเร็ว
 กด P เพื่อหยุดชั่วคราว
 กด R เพื่อรันต่อ
-กด F2 หยุด+รีเซ็ต
+กด F2 หยุด+รีเซ็ต/ลดความเร็ว
 กด F3 แก้ไขข้อความ
 กด F5 เต็มจอ/ย่อ
+กด F10 วิธีใช้งาน
 กด F12 ปิดโปรแกรม
 กดลูกศรซ้าย/ขวา ปรับตำแหน่ง
 กดลูกศรขึ้น/ลง ปรับขนาดฟอนต์
@@ -58,7 +60,42 @@ MAINTEXT = '''กด F1 รัน
 ...
 ฮัมวี่มารับลุงแล้ว!
 555
+
+พัฒนาโดย: ลุงวิศวกร สอนคำนวณ
+FB: https://www.facebook.com/UncleEngineer
+YouTube: https://www.youtube.com/UncleEngineer
 '''
+
+
+MAINTEXT = '''กด F1 รัน/เพิ่มความเร็ว
+กด P เพื่อหยุดชั่วคราว
+กด R เพื่อรันต่อ
+กด F2 หยุด+รีเซ็ต/ลดความเร็ว
+กด F3 แก้ไขข้อความ
+กด F5 เต็มจอ/ย่อ
+กด F10 วิธีใช้งาน
+กด F12 ปิดโปรแกรม
+กดลูกศรซ้าย/ขวา ปรับตำแหน่ง
+กดลูกศรขึ้น/ลง ปรับขนาดฟอนต์
+สวัสดีจ้าา
+ลุงเองจ้าาาาา
+ไม่มีอะไรทำ
+เลยเขียนโปรแกรมเล่น
+โปรแกรมสำหรับอ่านข่าว
+สไลด์ข้อความขึ้น
+อ่านเรื่อยๆ
+ใช้ร้องเพลง
+คาราโอเกะ
+เราจะทำตามสัญญา
+ขอเวลาอีกไม่นาน
+...
+...
+ฮัมวี่มารับลุงแล้ว!
+555
+
+พัฒนาโดย: ลุงวิศวกร สอนคำนวณ
+'''
+
 
 xpos = 80
 
@@ -99,14 +136,14 @@ except:
 
 def readtext():
 	global MAINTEXT
-	with open('runningtext.txt') as rt:
+	with open('runningtext.txt',encoding='utf-8') as rt:
 		settext = rt.read()
 		MAINTEXT = settext
 
 try:
 	readtext()
 except:
-	with open('runningtext.txt','w') as rt:
+	with open('runningtext.txt','w',encoding='utf-8') as rt:
 		rt.writelines(MAINTEXT)
 	readtext()
 
@@ -121,6 +158,8 @@ MT.place(x=xpos,y=0)
 global ypos
 global runafter
 
+runafter = None
+
 ypos = 0
 
 def MoveText(event=None):
@@ -131,10 +170,14 @@ def MoveText(event=None):
 	runafter = MT.after(60,MoveText)
 	
 def ResetText(event=None):
-	global ypos
-	MT.place(x=50,y=0)
-	ypos = 0
-	MT.after_cancel(runafter)
+	try:
+		global ypos
+		global runafter
+		MT.place(x=50,y=0)
+		ypos = 0
+		MT.after_cancel(runafter)
+	except:
+		pass
 
 def GUI2(event):
 	EDT = Toplevel()
@@ -156,7 +199,7 @@ def GUI2(event):
 	def SaveText():
 		data = textbox.get('1.0', END)
 		MTEXT.set(data)
-		with open('runningtext.txt','w') as rt:
+		with open('runningtext.txt','w',encoding='utf-8') as rt:
 			rt.writelines(MTEXT.get())
 		readtext()
 		MTEXT.set(MAINTEXT)
@@ -214,4 +257,5 @@ GUI.bind('<F1>', MoveText)
 GUI.bind('<F2>',ResetText)
 GUI.bind('<F3>',GUI2)
 GUI.bind('<F12>',lambda x:GUI.destroy())
+GUI.bind('<F10>',lambda x:messagebox.showinfo('Help',HELP))
 GUI.mainloop()
